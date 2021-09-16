@@ -17,18 +17,7 @@
 </head>
 
 <body id="app-layout">
-    <nav>
-        <div class="nav-wrapper blue">
-            <div class="container">
-                <a href="#!" class="brand-logo">Logo</a>
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="#">Home</a></li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @include('layouts._admin._nav')
 
     <ul class="sidenav" id="mobile-demo">
         <li><a href="#">Home</a></li>
@@ -36,8 +25,32 @@
     </div>
     </div>
     </nav>
+    <main>
+        @yield('content')
+    </main>
+    <footer class="page-footer blue">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">SisAdmin</h5>
 
-    @yield('content')
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="{{ route('site.home') }}">Site</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2021 Site de Imoveis | CRECI 12345
+                <a class="grey-text text-lighten-4 right" href="#!">JTC Sistemas WEB</a>
+            </div>
+        </div>
+    </footer>
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"
