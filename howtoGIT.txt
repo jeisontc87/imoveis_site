@@ -1,0 +1,87 @@
+Digite esse comando para mostrar o nome e email
+
+
+  git config --global user.email "jeisontc87@gmail.com"
+  git config --global user.name "Jeison TC"
+
+para clonar um repositorio 
+
+copie o link do codigo do github ou gitbucket, abra o git bash here onde vc quer clonar, e digite:
+git clone https://github.com/jeisontc87/crud.git [NOME PERSONALIZADO OPCIONAL]
+
+-*-*-*-*-*-*-*-*-*-*-
+
+CRIAR REPOSITORIO
+
+Abrir a pasta onde vai criar,criar a pasta e dar gitbash here
+dar o comando dentro da pasta criada:
+
+git init (pra ver se funcionou abra o diretorio \.git)
+
+apos criar um arquivo
+
+digite:
+git add [nomedoarquivo] (para somente um arquivo) ou 
+git add --all (para todos os arquivos)
+
+
+Confirma fazendo um commit com o codigo:
+
+git commit -m "[COMENTARIO]"
+
+*/*/*/*/*/*/*/*/*/*/*/*/*
+
+enviar o arquivo para o git hub
+
+crie o repositorio na sua conta do github
+
+selecione se quer deixar publico ou privado
+selecione se vai usar o git ignore
+crie o repositorio
+
+copie o endereço criado no github do repositorio criado
+agora va na pasta do pc que está o arquivo a ser enviado
+digite
+ git remote add origin [URL do repositorio]
+ git push origin master   >>>>>> sendo que git push origin<para onde vai, origin> master <de onde é master>
+
+-*-*-*-*-*-*-*-*--*-*-*-*-*
+
+PUXAR PARA A PASTA LOCAL
+
+para puxar uma versao atual do projeto digite
+git pull origin master
+
+
+**/*/*/*/*/*/*/*//**/
+resumo para enviar para a nuvem um projeto ja existente
+
+git init
+git config --global core.autocrlf true
+git add --all
+git commit -m "[COMENTARIO]"
+git remote add origin [URL do repositorio do git]
+git push origin master
+
+	+-------------------------------------------------------------+ 
+	|se precisar trocar a url                         	      |
+	|git remote set-url origin new.git.url/[NOVA_URL]	      |
+	|							      |
+	|ou							      |
+	|git remote -v						      |
+	|# View existing remotes				      |
+	|# origin  https://github.com/user/repo.git (fetch)           |
+	|# origin  https://github.com/user/repo.git (push)|           |
+	|							      |
+	|git remote set-url origin https://github.com/user/repo2.git  |
+	|# Change the 'origin' remote's URL        		      |
+	|							      |
+	|git remote -v						      |
+	# Verify new remote URL					      |
+	# origin  https://github.com/user/repo2.git (fetch)	      |
+	# origin  https://github.com/user/repo2.git (push) 	      | 
+	+-------------------------------------------------------------+
+
+
+
+	

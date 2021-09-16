@@ -843,3 +843,105 @@ class UsuariosSeeds extends Seeder
 apos criar ir no cmd e dar o comando:
 php artisan db:seed
 
+/*/*/*/*/*/*/*/*//*/*/**/*/*/*/*/*/*/*/*/*
+
+retornar msg de erro e controle de rotas
+
+ir no UsuariosController e colocar o campo 
+\Session::flash('mensagem', ['msg' = 'Login realizado com sucesso!', 'class' = 'green white-text']); conforme modelo abaixo:
+
+
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Auth;
+
+class UsuarioController extends Controller
+{
+    public function login(Request $request)
+    {
+        $dados = $request->all();
+        if (Auth::attempt(['email' => $dados['email'], 'password' => $dados['password']])) {
+            \Session::flash('mensagem', ['msg' => 'Login realizado com sucesso!', 'class' => 'green white-text']);
+            return redirect()->route('admin.principal');
+        }
+        \Session::flash('mensagem', ['msg' => 'Erro! Confira seus dados.', 'class' => 'red white-text']);
+        return redirect()->route('admin.login');
+    }
+}
+
+ir em layouts\app.blade
+
+e colocar esse codigo abaixo da tag main 
+
+ @if (Session::has('mensagem'))
+            <div class="container">
+                <div class="row">
+                    <div class="card {{ Session::get('mensagem')['class'] }}">
+                        <div align="center" class="card-content">
+                            {{ Session::get('mensagem')['msg'] }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        @endif
+
+
+*/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
+
+agora vamos proteger nossas rotas...
+derrubar a sessao
+ir em storage/frameworks/sessions e apagar o arquivo com um monte de numeros para derrubar a sessao...
+ir em app/http/midleware/authentificate.php
+
+e alterar  o return do if para retornar /admin/login no  lugar de login:
+
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Support\Facades\Auth;
+
+class Authenticate
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string|null  $guard
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $guard = null)
+    {
+        if (Auth::guard($guard)->guest()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest('/admin/login');
+            }
+        }
+
+        return $next($request);
+    }
+}
+
+
+ir em rotas e criar um grupo de rotas protegidas e colocar a ultima rota dentro para ser protegida:
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/admin', ['as' => 'admin.principal', function () {
+        return view('admin.principal.index');
+    }]);
+});
+
+
+
+
+
