@@ -20,4 +20,10 @@ class UsuarioController extends Controller
         \Session::flash('mensagem', ['msg' => 'Erro! Confira seus dados.', 'class' => 'red white-text']);
         return redirect()->route('admin.login');
     }
+
+    public function sair()
+    {
+        Auth::logout();
+        return redirect()->route('admin.login');
+    }
 }

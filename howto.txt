@@ -941,6 +941,93 @@ Route::group(['middleware' => 'auth'], function () {
     }]);
 });
 
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+
+ajuste de navegação no modulo de administraçao
+ir em resources/views/layouts/_admin/_nav
+e editar as rotas do _nav
+
+<nav>
+    <div class="nav-wrapper blue">
+        <div class="container">
+            <a href="{{ route('admin.principal') }}" class="brand-logo">SisAdmin</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ route('admin.principal') }}">Início</a></li>
+                <li><a target="_blank" href="{{ route('site.home') }}">Site</a></li>
+                @if (Auth::guest())
+                    <li><a href="{{ route('admin.login') }}">Login</a></li>
+                @else
+                    <li><a href="#">{{ Auth::user()->name }}</a></li>
+                    <li><a href="{{ route('admin.login.sair') }}">Sair</a></li>
+                @endif
+            </ul>
+            <ul class="sidenav" id="mobile-demo">
+                <li><a href="{{ route('admin.principal') }}">Início</a></li>
+                <li><a target="_blank" href="{{ route('site.home') }}">Site</a></li>
+
+                @if (Auth::guest())
+                    <li><a href="{{ route('admin.login') }}">Login</a></li>
+                @else
+                    <li><a href="#">{{ Auth::user()->name }}</a></li>
+                    <li><a href="{{ route('admin.login.sair') }}">Sair</a></li>
+                @endif
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+ir em routes e criar a rota para logout
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/admin/login/sair', ['as' => 'admin.login.sair', 'uses' => 'Admin\UsuarioController@sair']);
+    Route::get('/admin', ['as' => 'admin.principal', function () {
+        return view('admin.principal.index');
+    }]);
+});
+
+
+ir no UsuariosController e acrescentar a funcao sair no final do arquivo
+
+public function sair()
+    {
+        Auth::logout();
+        return redirect()->route('admin.login');
+    }
+
+
+ir no rodapé do views/layouts/app.blade e editar os links tambem
+
+
+<footer class="page-footer blue">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">SisAdmin</h5>
+                    <p class="grey-text text-lighten-4">Sistema de Administração</p>
+
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="{{ route('admin.principal') }}">Inicio</a></li>
+                        <li><a class="grey-text text-lighten-3" href="{{ route('site.home') }}">Site</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2021 Site de Imoveis | CRECI 12345
+                <a class="grey-text text-lighten-4 right" href="#!">JTC Sistemas WEB</a>
+            </div>
+        </div>
+    </footer>
+
+
+
 
 
 
