@@ -1,0 +1,845 @@
+instalar xampp (7.0.9)
+instalar composer
+instalar node js
+
+instalar o projeto
+comentar o database mysql
+criar arquivo em databases chamada database.sqlite
+dar php artisan migrate
+rodar pra ver se ta ok
+php artisan serve
+parar o server
+instalar o auth
+php artisan make:auth
+
+instalar bower
+npm install -g bower
+criar na raiz do projeto um arquivo chamado 
+.bowerrc
+e dentro dele colocar
+
+{
+  "directory": "public/lib" 
+}
+ para salvar tudo que for baixado via bower na pasta indicada
+
+salvar 
+
+instalar materialize https://materializecss.com/getting-started.html
+
+bower install materialize
+
+tirar boot strap e styles do app.blade
+
+incluir o materialize css
+<link  rel="stylesheet" type="text/css" href="{{asset('lib/materialize/dist/css/materialize.css')}}">
+
+no final incluir
+@yield('content')
+    //<script src="{{asset('lib/jquery/dist/jquery.js')}}"></script>
+    <script src="{{asset('lib/materialize/dist/js/materialize.js')}}"></script>
+
+usar o ultimo navbar do materialize
+
+<nav>
+        <div class="nav-wrapper blue">
+          <a href="#!" class="brand-logo">Logo</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#">Home</a></li>
+           
+          </ul>
+        </div>
+      </nav>
+    
+      <ul class="sidenav" id="mobile-demo">
+        <li><a href="#">Home</a></li>
+      </ul>
+
+e inicializar o mobile navbar
+
+crie uma pasta em public chamada js e outra css
+na js crie um arquivo chamado init.js
+e dentro dele coloque
+
+$(document).ready(function () {
+  $('.sidenav').sidenav();
+});
+
+na pasta css crie um arquivo chamado style.css
+
+no app.blade declarar no head o arquivo style.css
+<link  rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"> 
+
+e o init.js no footer
+<script src="{{asset('js/init.js')}}"></script>
+
+arrumar o espaçamento do logo criando uma div chamada container
+<nav>
+    <div class="nav-wrapper blue">
+        <div class="container"> //essa é a div criada
+            <a href="#!" class="brand-logo">Logo</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
+
+            </ul>
+        </div> //fechamento da div criada
+    </div>
+</nav>
+
+<ul class="sidenav" id="mobile-demo">
+    <li><a href="#">Home</a></li>
+</ul>
+</div>
+</div>
+</nav>
+
+/**/*/*/*/*/*/*/*/*/*/*/*/*/*//*/*/*/*/*/*//*/*/*/*/*/*/*/**/*/*/*/
+
+vamos começar a separar o site do admim...
+
+criamos uma pasta dentro de view chamada site
+criar dentro de site o arquivo home.blade.php
+copiar o conteudo de home.blade.php e salvar
+mudar o @extends('layouts.app') para ('layouts.site')
+dentro do div panel-body colocar a palavra HOME para testarmos se está certa a rota
+
+na pasta layouts criar um arquivo chamado site.blade.php e copiar o conteudo do app.blade.php
+
+apontar a rota de 
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+para 
+
+Route::get('/', function () {
+    return view('site.home');
+});
+
+
+agora vamos colocar os links do nosso site editando o arquivo site.blade.php
+e colocar 
+		<li><a href="#">Home</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li><a href="#">Contato</a></li>
+
+nos dois navbar, o normal e o mobile
+
+
+
+*/*/*/*/*/*/*/*/*/*//*/*/*/*//*/*/*/*/*/*/*/ slider e footer */*/*/*/*/*
+criar em layouts o diretorio _site , dentro dele o arquivo _nav.blade.php e recortar toda a div navbar do site.blade
+
+no site.blade
+fazer um @include com o novo endereço da navbar
+
+<body id="app.layout">
+    <header>
+        @include('layouts._site._nav')
+    </header>
+
+vamos criar um slideshow na nossa home
+criar uma pasta img em public e colocar as imagens 
+criar um arquivo chamado _slides.blade.php em _site e no arquivo criar o codigo
+
+
+<div class="slider">
+    <ul class="slides">
+        <li>
+            <img src="{{ asset('img/modelo_slide_1.jpg') }}" alt="imagem">
+            <div class="caption center-align">
+                <h3>Titulo da imagem</h3>
+                <h5>Descrição do Slide</h5>
+            </div>
+        </li>
+        <li>
+            <img src="{{ asset('img/modelo_slide_2.jpg') }}" alt="imagem">
+            <div class="caption center-align">
+                <h3>Titulo da imagem</h3>
+                <h5>Descrição do Slide</h5>
+            </div>
+        </li>
+        <li>
+            <img src="{{ asset('img/modelo_slide_3.jpg') }}" alt="imagem">
+            <div class="caption center-align">
+                <h3>Titulo da imagem</h3>
+                <h5>Descrição do Slide</h5>
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+
+
+criar uma pasta img em public para colocar as imagens
+
+em home.blade.php da pasta site colocar o @include do arquivo _slides.blade.php @include('layouts._site._slides')
+
+@section('content')
+    @include('layouts._site._slides')
+   
+@endsection
+
+
+no arquivo init.js na pasta js editar colocando o $('.slider').slider({ full_width: true });
+
+$(document).ready(function () {
+  $('.sidenav').sidenav();
+  $('.slider').slider({ full_width: true });
+});
+
+agora vamos fazer o rodapé...
+
+escolher em https://materializecss.com/footer.html
+sticky footer
+
+copiar o codigo css do materialize para o arquivo style.css na pasta css em public
+
+criar em _site um arquivo chamado _footer.blade.php
+e copiar o codigo do materialize editar a gosto
+
+incluir o extends do footer no arquivo site.php
+@include('layouts._site._footer')
+
+para fixar o footer no rodape coloque o @yeld('content') entre a tag main
+
+<main>
+        @yield('content')
+</main>
+
+/*/*/*/*/*/*/*/*/*/ lista de imoveis/*/*/*/*/*//*/*/*
+ir em resources / views / layouts / _site e criar _lista_imoveis.blade.php seguindo o codigo do materialize
+
+<div class="row section">
+    <h3 align="center">Imóveis</h3>
+    <div class="divider"></div>
+</div>
+
+<div class="row section">
+    <div class="col s12 m3"> ->>recortar daqui para duplicar
+        <div class="card">
+            <div class="card-image">
+                <a href="#"><img src="{{ asset('img/modelo_img_home.jpg') }}" alt="Imagem"></a>
+            </div>
+            <div class="card-content">
+                <p><b class="deep-orange-text darken-1">VENDE</b></p>
+                <p><b>Título do Imovel</b></p>
+                <p>Descrição do imovel</p>
+                <p>R$200.000,00</p>
+            </div>
+            <div class="card-action">
+                <a href="#">Ver Mais...</a>
+            </div>
+
+        </div>
+    </div> ----> até aqui
+
+
+
+</div> --- deixar essa div no final
+
+
+editar o arquivo home.blade.php e colocar o include de listar imoveis
+
+@extends('layouts.site')
+
+@section('content')
+    @include('layouts._site._slides')
+    <div class="container">
+        @include('layouts._site._lista_imoveis')
+    </div>
+@endsection
+
+
+*/*/*/*/*/*//* Criar pagina sobre e contato /***/*/*/*/*/*//*////*/**/
+
+abrir app/http/routes.php e colocar nova rota para sobre e contato
+
+Route::get('/', ['as' => 'site.home', function () {
+    return view('site.home');
+}]);
+
+Route::get('/sobre', ['as' => 'site.sobre', function () {
+    return view('site.sobre');
+}]);
+
+Route::get('/contato', ['as' => 'site.contato', function () {
+    return view('site.contato');
+}]);
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
+
+criar em public/site os arquivos blade do sobre e  contato
+
+o sobre ficará asssim:
+@extends('layouts.site')
+
+@section('content')
+
+    <div class="container">
+        <div class="row section">
+            <h3 align="center">Sobre</h3>
+            <div class="divider"></div>
+        </div>
+        <div class="row section">
+            <div class="col s12 m6">
+                <img class="responsive-img" src="{{ asset('img/modelo_img_home.jpg') }}" alt="">
+            </div>
+            <div class="col s12 m6">
+                <h4>A Empresa</h4>
+                <blockquote>
+                    Descrição breve sobre a empresa.
+                </blockquote>
+                <p>Texto sobre a empresa.</p>
+            </div>
+        </div>
+    </div>
+@endsection
+
+insira no css o codigo para mudar a cor padrao do tracinho para a cor do projeto:
+
+blockquote{
+  margin:20px 0;
+  padding-left: 1.5rem;
+  border-left: 5px solid #64b5f6;
+  
+}
+
+
+no contato colocar o codigo:
+
+@extends('layouts.site')
+
+@section('content')
+
+    <div class="container">
+        <div class="row section">
+            <h3 align="center">Contato</h3>
+            <div class="divider"></div>
+        </div>
+        <div class="row section">
+            <div class="col s12 m7">
+                <img class="responsive-img" src="{{ asset('img/modelo_img_home.jpg') }}" alt="">
+            </div>
+            <div class="col s12 m5">
+
+                <form class="col s12">
+                    <div class="input-field">
+                        <input type="text" name="name" class="validate">
+                        <label>Nome</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="email" class="validate">
+                        <label>Email</label>
+                    </div>
+                    <div class="input-field">
+                        <textarea class="materialize-textarea"></textarea>
+                        <label>Mensagem</label>
+                    </div>
+                    <button class="btn blue">Enviar</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+editar a rota dos links home,sobre e contato do rodape e header
+no href colocar{{route('site.home')}}, {{route('site.sobre')}} e {{route('site.contato')}}
+
+
++++/*/*+/+/+/+/*-/*-+*/+-/+-/-+/+-
+configurar o link personalizado da descrição dos imoveis
+
+abrir o arquivo de routes
+
+acrescentar depois de contato
+
+Route::get('/imovel/{id}/{titulo? ----> esse "?" é o que deixa como paramentro nao obrigatorio em uma rota}', ['as' => 'site.imovel', function () {
+    return view('site.imovel');
+}]);
+
+criar a view imovel.blade.php em site e copiar o conteudo de sobre
+
+testar a rota colocando no navegador 
+http://localhost:8000/imovel/34/titulo_do_imovel
+
+editar o view colocando as informaçoes:
+@extends('layouts.site')
+
+@section('content')
+
+    <div class="container">
+        <div class="row section">
+            <h3 align="center">Imóvel</h3>
+            <div class="divider"></div>
+        </div>
+        <div class="row section">
+            <div class="col s12 m8">
+                <div class="row">
+                    <div class="slider">
+                        <ul class="slides">
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_1.jpg') }}">
+                                <div class="caption center-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_2.jpg') }}">
+                                <div class="caption left-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_3.jpg') }}">
+                                <div class="caption right-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_4.jpg') }}">
+                                <div class="caption left-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="row" align="center">
+                    <button onclick="sliderPrev()" class="btn blue">Anterior</button> ---->>> onclickPrev e next é o que cria os botoes de voltar e seguinte
+                    <button onclick="sliderNext()" class="btn blue">Proxima</button>
+
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <h4>A Empresa</h4>
+                <blockquote>
+                    Descrição breve sobre a empresa.
+                </blockquote>
+                <p>Texto sobre a empresa.</p>
+            </div>
+        </div>
+    </div>
+@endsection
+
+ 	
+
+ir em init.js e colocar o codigo para os botões funcionar
+
+
+function sliderPrev() {
+  $('.slider').slider('pause');
+  $('.slider').slider('prev');
+}
+function sliderNext() {
+  $('.slider').slider('pause');
+  $('.slider').slider('next');
+}
+
+
+vamos alterar o campo de descrição
+
+ficando o codigo todo assim:
+@extends('layouts.site')
+
+@section('content')
+
+    <div class="container">
+        <div class="row section">
+            <h3 align="center">Imóvel</h3>
+            <div class="divider"></div>
+        </div>
+        <div class="row section">
+            <div class="col s12 m8">
+                <div class="row">
+                    <div class="slider">
+                        <ul class="slides">
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_1.jpg') }}">
+                                <div class="caption center-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_2.jpg') }}">
+                                <div class="caption left-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_3.jpg') }}">
+                                <div class="caption right-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                            <li>
+                                <img src="{{ asset('img/modelo_detalhe_4.jpg') }}">
+                                <div class="caption left-align">
+                                    <h3>Titulo da imagem</h3>
+                                    <h5>Descrição do Slide</h5>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="row" align="center">
+                    <button onclick="sliderPrev()" class="btn blue">Anterior</button>
+                    <button onclick="sliderNext()" class="btn blue">Proxima</button>
+
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <h4>Titulo do imovel</h4>
+                <blockquote>
+                    Descrição breve sobre o imóvel.
+                </blockquote>
+                <p><b>Código</b>245</p>
+                <p><b>Status:</b>Vende</p>
+                <p><b>Tipo:</b>Alvenaria</p>
+                <p><b>Endereço</b>Centro</p>
+                <p><b>Cep</b>83820491</p>
+                <p><b>Cidade</b>Fazendola</p>
+                <p><b>Valor</b>395.000,00</p>
+
+                <a class="btn deep-orange darken-1" href="{{ route('site.contato') }}">Entrar em contato</a>
+
+            </div>
+        </div>
+    </div>
+@endsection
+
++-*+-*+-*+-*++-*-+*-+*+*-+**-+*+*+-*+*+*-+-**+-*-+*+-*-+*+--**+*+*+*+*+-*+-*-+*+*-+*+*+*
+
+Criar filtros de buscas
+
+criar arquivo chamado _filtros.blade.php em _site
+colocar o include em _lista_imoveis.blade
+ @include('layouts._site._filtros')
+
+<div class="row">
+    <form>
+        <div class="input-field col s6 m4">
+            <select>
+                <option value="aluga">Aluga</option>
+                <option value="vende">Vende</option>
+            </select>
+            <label>Status</label>
+
+        </div>
+        <div class="input-field col s6 m4">
+            <select>
+                <option value="1">Alvenaria</option>
+                <option value="2">Apartamento</option>
+                <option value="3">Duplex</option>
+            </select>
+            <label>Tipo de Imóvel</label>
+
+        </div>
+
+        <div class="input-field col s6 m4">
+            <select>
+                <option value="1">Curitiba</option>
+                <option value="2">Faz.Rio Grande</option>
+                <option value="3">Araucária</option>
+            </select>
+            <label>Cidade</label>
+        </div>
+        <div class="input-field col s6 m3">
+            <select>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">Mais</option>
+            </select>
+            <label>Dormitórios</label>
+
+        </div>
+
+        <div class="input-field col s12 m4">
+            <select>
+                <option value="1">Até R$ 500,00</option>
+                <option value="2">R$ 500,00 a 1.000,00</option>
+                <option value="3">R$ 1.000,00 a 5.000,00</option>
+                <option value="4">R$ 5.000,00 a 10.000,00</option>
+                <option value="5">R$ 10.000,00 a 50.000,00</option>
+                <option value="6">R$ 50.000,00 a 100.000,00</option>
+                <option value="7">R$ 100.000,00 a 200.000,00</option>
+                <option value="8">R$ 200.000,00 a 300.000,00</option>
+                <option value="9">R$ 300.000,00 a 500.000,00</option>
+                <option value="10">R$ 500.000,00 a 1.000.000,00</option>
+                <option value="10">R$ Acima de R$ 1.000.000,00</option>
+            </select>
+            <label>Valor</label>
+
+        </div>
+
+        <div class="input-field col s12 m3">
+            <input class="validade" type="text" name="bairro" id="">
+            <label>Bairro</label>
+        </div>
+
+        <div class="input-field col s12 m2">
+            <button class="btn deep-orange darken-1 right">Filtrar</button>
+        </div>
+
+    </form>
+</div>
+
+ir em init.js e colocar 
+$(document).ready(function () {
+  $('.sidenav').sidenav();
+  $('.slider').slider({ full_width: true });
+  $('select').formSelect(); ---->> esse aqui
+});
+
+----------------------------------/ !!!   /--------------------------------------------------------
+definir tela de login
+
+remova a configuração de rotas 
+route auth
+e crie uma nova rota
+chamada 
+
+Route::get('/admin/login', ['as'=>'admin.login', function() {
+	return view('admin.login.index');
+}]);
+
+Ir em resources/view e criar um diretorio chamado "admin" e dentro dele um diretorio chamado "login" e dentro dele um arquivo chamado index.blade.php
+dentro do index colocar <h2>login</h2> só para testar a rota no navegador usando /admin/login
+funcionando ok vamos criar o layout e um arquivo de formulario a parte e usar como extend dentro do index
+
+index
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2>Entrar</h2>
+        <form action="#" method="post">
+            @include('admin.login._form')
+            <button class="btn blue">Entrar</button>
+
+        </form>
+    </div>
+@endsection
+
+ - crie uma arquivo chamado _form.blade.php em admin\login e use esse codigo:
+
+<div class="input-field">
+    <input type="text" name="email" class="validate">
+    <label>@ E-mail</label>
+</div>
+
+<div class="input-field">
+    <input type="password" name="password" class="validate">
+    <label>* Senha</label>
+</div>
+
+criar em layouts uma pasta chamada _admin e nela criar um arquivo chamado _nav.blade.php
+
+recortar todo o conteudo da tag <nav> do app.blade.php e colar no novo _nav
+colocar o include do _nav no lugar da tag <nav> no app.blade 
+@include('layouts._admin._nav')
+
+no arquivo _nav Mudar o texto LOGO para "SisAdmin"
+
+ir no layouts/app
+
+e copiar o conteudo de footer modificado
+
+<footer class="page-footer blue">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">SisAdmin</h5>
+
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="{{ route('site.home') }}">Site</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2021 Site de Imoveis | CRECI 12345
+                <a class="grey-text text-lighten-4 right" href="#!">JTC Sistemas WEB</a>
+            </div>
+        </div>
+    </footer>
+
+para ter espaçamento correto colocar o @yeldcontent dentro de <main>
+
+<main>
+    @yield('content')
+</main>
+
+*/*/*/*/*/*/*/**/*/*//*/*/***/*/*/*/*/*/**/*/**/*/*/*//**/*/****/*/*/
+implementação do login
+
+Criar o controller:
+parar o server e digitar
+
+php artisan make:controller Admin\UsuarioController
+
+ir em rotas e criar a rota post com o controlador:
+Route::post('/admin/login', ['as' => 'admin.login', 'uses' => 'Admin\UsuarioController@login']);
+
+ir no controlador criado e criar o metodo login
+
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Auth;
+
+class UsuarioController extends Controller
+{
+    public function login(Request $request)
+    {
+        $dados = $request->all();
+        if (Auth::attempt(['email' => $dados['email'], 'password' => $dados['password']])) {
+            return redirect()->route('site.home');
+        }
+        return redirect()->route('site.home');
+    }
+}
+
+
+
+
+ir no index.blade e apontar o form action para o controlador e colocar o token csrf
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2>Entrar</h2>
+        <form action="{{ route('admin.login') }}" method="post">
+            {{ csrf_field() }}
+            @include('admin.login._form')
+            <button class="btn blue">Entrar</button>
+
+        </form>
+    </div>
+@endsection
+
+
+Iniciar o server novamente
+
+
+
+ir em rotas apagar a rota home
+Route::get('/home', 'HomeController@index');
+
+e criar a nova rota para o pós login
+
+Route::get('/admin', ['as' => 'admin.principal', function () {
+    return view('admin.principal.index');
+}]);
+
+ir em layout/admin e criar a pasta "principal" e o arquivo index.blade
+
+copiar o modelo do index.blade da pasta login, para teste, apagar o form e escrever Principal entre as tags H2
+
+ir no controller e arrumar a rota de login "OK"
+
+
+class UsuarioController extends Controller
+{
+    public function login(Request $request)
+    {
+        $dados = $request->all();
+        if (Auth::attempt(['email' => $dados['email'], 'password' => $dados['password']])) {
+            return redirect()->route('admin.principal');
+        }
+        return redirect()->route('site.home');
+    }
+}
+
+criar um seeder para fazer login
+parar o server e digitar 
+php artisan make:seed UsuariosSeeds
+
+ir em dabase\seeds\DatabaseSeeder e descomentar a linha, colocando o nome do seeder criado ficando assim:
+
+
+<?php
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->call(UsuariosSeeds::class);
+    }
+}
+
+
+
+ir no seedcriado "UsuariosSeeds" e colocar o "use App\User" para usar o banco de dados ja criado em User.php, tambem criar o usuario no seeder conforme abaixo:
+
+
+<?php
+
+use Illuminate\Database\Seeder;
+use App\User;
+class UsuariosSeeds extends Seeder
+
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $usuario = new User();
+        $usuario->name = "Jeison TC";
+        $usuario->email = "admin@mail.com";
+        $usuario->password = bcrypt("123456");
+        $usuario->save();
+    }
+}
+
+
+
+apos criar ir no cmd e dar o comando:
+php artisan db:seed
+
