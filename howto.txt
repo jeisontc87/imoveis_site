@@ -1185,6 +1185,8 @@ ir em controllers e criar os controllers para adicionar e salvar
     }
 
 
+
+
 criar a view de adicionar e salvar em views\admin\usuarios .... adicionar.blade...
 
 
@@ -1291,8 +1293,94 @@ em index vamos adicionar um botao para a rota "adicionar"
 @endsection
 
 
+/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/**/**/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
+editando usuarios
+
+vamos criar a rota de edição dentro da rota protegida
+
+		Route::get('/admin/usuarios/editar/{id}', ['as' => 'admin.usuarios.editar', 'uses' => 'Admin\UsuarioController@editar']);
+   		Route::put('/admin/usuarios/atualizar/{id}', ['as' => 'admin.usuarios.atualizar', 'uses' => 'Admin\UsuarioController@atualizar']);
+
+criamos os controllers de editar e atualizar ....
+
+public function editar($id)
+    {
+        $usuario = User::find($id);
+        return view('admin.usuarios.editar', compact('usuario'));
+    }
 
 
+
+     public function atualizar(Request $request, $id)
+    {
+        $usuario = User::find($id);
+        $dados = $request->all();
+        if (isset($dados['password']) && strlen($dados['password']) > 5) {
+            $dados['password'] = bcrypt($dados['password']);
+        } else {
+            unset($dados['password']);
+        }
+
+        $usuario->update($dados);
+        \Session::flash('mensagem', ['msg' => 'Usuario editado com sucesso!', 'class' => 'green white-text']);
+        return redirect()->route('admin.usuarios');
+    }
+
+criamos a view editar em views admin\usuarios\editar.blade... copie o codigo do adicionar e o edite...
+
+@extends('layouts.app')
+@section('content')
+    <div class="container">
+        <h2 class="center">Editar usuário</h2>
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper green">
+                    <div class="col s12">
+                        <a href="{{ route('admin.principal') }}" class="breadcrumb">Inicio</a>
+                        <a href="{{ route('admin.usuarios') }}" class="breadcrumb">Lista de Usuarios</a>
+                        <a class="breadcrumb">Editar Ususuario</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <form action="{{ route('admin.usuarios.atualizar', $usuario->id) }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="_method" value="put"> <==== esse campo transforma o metodo de envio em put
+                @include('admin.usuarios._form')
+                <button class="btn blue">Atualizar</button>
+            </form>
+        </div>
+
+    </div>
+
+
+@endsection
+
+
+
+ir no form e editar colocando para aparecer o nome e email no formulario se previamente estiver salvo....
+
+
+<div class="input-field">
+    <input type="text" name="name" class="validate" value="{{ isset($usuario->name) ? $usuario->name : '' }}">
+    <label>Nome</label>
+</div>
+
+<div class="input-field">
+    <input type="text" name="email" class="validate" value="{{ isset($usuario->email) ? $usuario->email : '' }}">
+    <label>E-mail</label>
+</div>
+
+<div class="input-field">
+    <input type="password" name="password" class="validate">
+    <label>Senha</label>
+</div>
+
+
+ir em index e atualizar a rota do botao editar:
+
+<a class="btn orange" href="{{ route('admin.usuarios.editar', $usario->id) }}">Editar</a>
 
 
 
