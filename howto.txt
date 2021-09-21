@@ -1383,5 +1383,35 @@ ir em index e atualizar a rota do botao editar:
 <a class="btn orange" href="{{ route('admin.usuarios.editar', $usario->id) }}">Editar</a>
 
 
+*/*/*/*/*/*/*/*/**/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
+deletando usuarios (17)
+
+faremos um alert em java script perguntando se o usuario tem certeza que deseja deletar o registro...
+vamos no index e no codigo do deletar
+no href do botao deletar colocar 
+
+	<a class="btn red" href="javascript: if(confirm('Deseja mesmo deletar esse registro?')){window.location.href = 'teste'}">Deletar</a>
+
+
+ir em rotas e criar a rota de deletar dentro das rotas protegidas...
+
+Route::get('/admin/usuarios/deletar/{id}', ['as' => 'admin.usuarios.deletar', 'uses' => 'Admin\UsuarioController@deletar']);
+
+
+ir no controller e criar o controller deletar
+
+public function deletar($id)
+    {
+        User::find($id)->delete();
+        \Session::flash('mensagem', ['msg' => 'Usuario deletado com sucesso!', 'class' => 'green white-text']);
+        return redirect()->route('admin.usuarios');
+    }
+
+ir em index e definir a rota do deletar no lugar do "teste"
+
+ href="javascript: if(confirm('Deseja mesmo deletar esse registro?')){window.location.href = '{{ route('admin.usuarios.deletar', $usuario->id) }}'}">Deletar</a>
+
+
+
 
 
