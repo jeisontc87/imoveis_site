@@ -1144,4 +1144,156 @@ ir em materializecss.com/breadcrumbs.html e copiar o "basico" e colocar na view 
 
 @endsection
 
+/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
+
+
+adicionar usuarios
+
+criar a rota de adicionar e salvar
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/admin/login/sair', ['as' => 'admin.login.sair', 'uses' => 'Admin\UsuarioController@sair']);
+
+    Route::get('/admin', ['as' => 'admin.principal', function () {
+        return view('admin.principal.index');
+    }]);
+
+    Route::get('/admin/usuarios', ['as' => 'admin.usuarios', 'uses' => 'Admin\UsuarioController@index']);
+    Route::get('/admin/usuarios/adicionar', ['as' => 'admin.usuarios.adicionar', 'uses' => 'Admin\UsuarioController@adicionar']);
+    Route::post('/admin/usuarios/salvar', ['as' => 'admin.usuarios.salvar', 'uses' => 'Admin\UsuarioController@salvar']);
+});
+
+
+ir em controllers e criar os controllers para adicionar e salvar
+
+ public function adicionar()
+    {
+        return view('admin.usuarios.adicionar');
+    }
+
+    public function salvar(Request $request)
+    {
+        $dados = $request->all();
+        $usuario = new User();
+        $usuario->name = $dados['name'];
+        $usuario->email = $dados['email'];
+        $usuario->password = bcrypt($dados['password']);
+        $usuario->save();
+        \Session::flash('mensagem', ['msg' => 'Usuario adicionado com sucesso!', 'class' => 'green white-text']);
+        return redirect()->route('admin.usuarios');
+    }
+
+
+criar a view de adicionar e salvar em views\admin\usuarios .... adicionar.blade...
+
+
+@extends('layouts.app')
+@section('content')
+    <div class="container">
+        <h2 class="center">Adicionar Usuários</h2>
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper green">
+                    <div class="col s12">
+                        <a href="{{ route('admin.principal') }}" class="breadcrumb">Inicio</a>
+                        <a href="{{ route('admin.usuarios') }}" class="breadcrumb">Lista de Usuarios</a>
+                        <a href="#!" class="breadcrumb">Adicionar Ususuarios</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <form action="{{ route('admin.usuarios.salvar') }}" method="POST">
+                {{ csrf_field() }}
+                @include('admin.usuarios._form')
+                <button class="btn blue">Adicionar</button>
+            </form>
+        </div>
+
+    </div>
+
+
+@endsection
+
+criamos em views\admin\usuarios o _form
+
+<div class="input-field">
+    <input type="text" name="name" class="validate">
+    <label>Nome</label>
+</div>
+
+<div class="input-field">
+    <input type="text" name="email" class="validate">
+    <label>E-mail</label>
+</div>
+
+<div class="input-field">
+    <input type="password" name="password" class="validate">
+    <label>Senha</label>
+</div>
+
+
+
+em index vamos adicionar um botao para a rota "adicionar"
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2 class="center">Lista de Usuários</h2>
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper green">
+                    <div class="col s12">
+                        <a href="{{ route('admin.principal') }}" class="breadcrumb">Inicio</a>
+                        <a href="#!" class="breadcrumb">Lista de Usuarios</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ação</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($usuarios as $usuario)
+
+
+                        <tr>
+                            <td>{{ $usuario->id }}</td>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>
+                                <a class="btn orange" href="#">Editar</a>
+                                <a class="btn red" href="#">Deletar</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <a class="btn blue" href="{{ route('admin.usuarios.adicionar') }} ">Adicionar</a>
+
+        </div>
+    </div>
+
+@endsection
+
+
+
+
+
+
+
 
