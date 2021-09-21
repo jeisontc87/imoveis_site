@@ -34,7 +34,10 @@ Route::post('/admin/login', ['as' => 'admin.login', 'uses' => 'Admin\UsuarioCont
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin/login/sair', ['as' => 'admin.login.sair', 'uses' => 'Admin\UsuarioController@sair']);
+
     Route::get('/admin', ['as' => 'admin.principal', function () {
         return view('admin.principal.index');
     }]);
+
+    Route::get('/admin/usuarios', ['as' => 'admin.usuarios', 'uses' => 'Admin\UsuarioController@index']);
 });

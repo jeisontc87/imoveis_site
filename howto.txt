@@ -1027,8 +1027,121 @@ ir no rodapé do views/layouts/app.blade e editar os links tambem
     </footer>
 
 
+/*/*/*/*/*/*/*****/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 
 
+listagem de usuarios
 
+
+ir em rotas, e em rotas protegidas fazer a rota:
+
+ Route::get('/admin/usuarios', ['as' => 'admin.usuarios', 'uses' => 'Admin\UsuarioController@index']);
+
+criar o controlador index do  usuario.
+declarar o User de App\User no controlador;
+
+Use App\User;
+
+cirar a função index no controlador
+
+public function index()
+    {
+        $usuarios = User::all();
+        return view('admin.usuarios.index', compact('usuarios'));
+    }
+}
+
+criar a view index em admin\usuarios\index.blade
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2 class="center">Lista de Usuários</h2>
+
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ação</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($usuarios as $usuario)
+
+
+                        <tr>
+                            <td>{{ $usuario->id }}</td>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>
+                                <a class="btn orange" href="#">Editar</a>
+                                <a class="btn red" href="#">Deletar</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@endsection
+
+ir em materializecss.com/breadcrumbs.html e copiar o "basico" e colocar na view ficando assim:
+
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2 class="center">Lista de Usuários</h2>
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper green">
+                    <div class="col s12">
+                        <a href="{{ route('admin.principal') }}" class="breadcrumb">Inicio</a>
+                        <a href="#!" class="breadcrumb">Lista de Usuarios</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ação</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($usuarios as $usuario)
+
+
+                        <tr>
+                            <td>{{ $usuario->id }}</td>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>
+                                <a class="btn orange" href="#">Editar</a>
+                                <a class="btn red" href="#">Deletar</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@endsection
 
 

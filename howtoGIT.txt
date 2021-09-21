@@ -63,6 +63,14 @@ git commit -m "[COMENTARIO]"
 git remote add origin [URL do repositorio do git]
 git push origin master
 
+ *** DEPOIS DA PRIMEIRA VEZ USAR ASSIM NO LARAVEL:
+git config --global core.autocrlf true
+git add --all
+git add --all
+git commit -m "[COMENTARIO]"
+git push origin master
+
+
 	+-------------------------------------------------------------+ 
 	|se precisar trocar a url                         	      |
 	|git remote set-url origin new.git.url/[NOVA_URL]	      |
