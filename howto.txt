@@ -1413,5 +1413,82 @@ ir em index e definir a rota do deletar no lugar do "teste"
 
 
 
+/*/*/*//*/*/-*/-/*-/-*//*/*/-/*-/*-/*-/*-/-*/-*/-*/*-/-*/-*/-/-/-
+
+ATUALIZAÇÃO DA PAGINA SOBRE
+
+
+
+Vamo começar criando a model e migration da pagina
+
+php artisan make:model Pagina -m
+
+ir na migration criada e adicionar os campos nescessarios;
+
+public function up()
+    {
+        Schema::create('paginas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('titulo');
+            $table->string('descricao');
+            $table->text('texto');
+            $table->string('imagem')->nullable();
+            $table->string('mapa')->nullable();
+            $table->string('email')->nullable();
+            $table->string('tipo');
+            
+            $table->timestamps();
+        });
+    }
+
+dar um php artisan migrate 
+
+para ver as migrações implementadas dar um 
+
+php artisan migrate:status
+
+criar o seeder
+
+php artisan make:seed PaginasSeeds
+
+ir em DatabaseSeeder e adicionar o PaginasSeeds::class
+
+public function run()
+    {
+        $this->call(UsuariosSeeds::class);
+        $this->call(PaginasSeeds::class);
+    }
+
+Ir no paginaseeds e colocar o Use 
+
+use App\Pagina;
+
+e implementar o codigo
+
+public function run()
+    {
+        $existe = Pagina::where('tipo', '=', 'sobre')->count();
+
+        if ($existe) {
+            $paginaSobre = Pagina::where('tipo', '=', 'sobre')->first();
+        } else {
+            $paginaSobre = new Pagina();
+        }
+
+        $paginaSobre->titulo = "A Empresa";
+        $paginaSobre->descricao = "Descrição breve sobre a empresa.";
+        $paginaSobre->texto = "Texto sobre a empresa.";
+        $paginaSobre->imagem = "site/img/modelo_img_home.jpg";
+        $paginaSobre->tipo = "sobre";
+        $paginaSobre->save();
+echo "Pagina sobre criada com sucesso";
+    }
+
+
+
+rodar no console
+
+php artisan db:seed --class=PaginasSeeds
+
 
 
