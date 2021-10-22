@@ -1717,9 +1717,37 @@ ficando assim:
 
 
 
-ir no controlador Admin>PaginaController e 
+ir no controlador Admin>PaginaController e criar o controller do index de paginas nao esquecendo de adicionaro "use" no começo
 
 
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\Pagina;
+
+class PaginaController extends Controller
+{
+    public function index()
+    {
+        $paginas = Pagina::all();
+        return view('admin.paginas.index', compact('paginas'));
+    }
+
+    public function editar($id)
+    {
+        //
+    }
+
+    public function atualizar(Request $request, $id)
+    {
+        //
+    }
+}
 
 
 
