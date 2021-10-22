@@ -3,7 +3,11 @@ instalar composer
 instalar node js
 
 instalar o projeto
+ir em .env
+trocar o db conection para sqlite
+DB_CONNECTION=sqlite
 comentar o database mysql
+#DB_DATABASE=homestead
 criar arquivo em databases chamada database.sqlite
 dar php artisan migrate
 rodar pra ver se ta ok
@@ -1556,6 +1560,172 @@ abrir o sobre.blade e editar
         </div>
     </div>
 @endsection
+
+
+*/****/*/*-/-*/-*/-*/*-/-*/-*/-*/-*/*-/-*/*-/-**-
+listar as paginas estaticas no admin 20
+
+criar as rotas na rota segura
+
+	Route::get('/admin/paginas', ['as' => 'admin.paginas', 'uses' => 'Admin\PaginaController@index']);
+   	Route::get('/admin/paginas/editar/{id}', ['as' => 'admin.paginas.editar', 'uses' => 'Admin\PaginaController@editar']);
+    	Route::put('/admin/paginas/atualizar{id}', ['as' => 'admin.paginas.atualizar', 'uses' => 'Admin\PaginaController@index']);
+
+
+criar o controlador PaginaController
+php artisan make:controller Admin\PaginaController
+
+criar os metodos do controller criado:
+
+class PaginaController extends Controller
+{
+    public function index()
+    {
+        //
+    }
+
+    public function editar($id)
+    {
+        //
+    }
+
+    public function atualizar(Request $request, $id)
+    {
+        //
+    }
+}
+
+
+
+vamos criar um menu dropdown no nome do usuario logado seguindo os preceitos do materialize
+
+abrir o navbar do admin(layout\_admin\_nav.blade) e editalo 
+
+<nav>
+    <div class="nav-wrapper blue">
+        <div class="container">
+            <a href="{{ route('admin.principal') }}" class="brand-logo">SisAdmin</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ route('admin.principal') }}">Início</a></li>
+                <li><a target="_blank" href="{{ route('site.home') }}">Site</a></li>
+                @if (Auth::guest())
+                    <li><a href="{{ route('admin.login') }}">Login</a></li>
+                @else
+
+                    <li><a class="dropdown-button" href="#!" data-target="dropdown1">{{ Auth::user()->name }}<i
+                                class="material-icons right">arrow_drop_down</i></a></li>
+                    <ul id='dropdown1' class='dropdown-content'>
+                        <li><a href="#!">{{ Auth::user()->name }}</a></li>
+                        <li><a href="{{ route('admin.usuarios') }}">Usuários</a></li>
+                        <li><a href="{{ route('admin.paginas') }}">Páginas</a></li>
+                    </ul>
+                    <li><a href="{{ route('admin.login.sair') }}">Sair</a></li>
+                @endif
+            </ul>
+
+
+            <ul class="sidenav" id="mobile-demo">
+                <li><a href="{{ route('admin.principal') }}">Início</a></li>
+                <li>
+                    <a target="_blank" href="{{ route('site.home') }}">Site</a>
+                </li>
+
+                @if (Auth::guest())
+                    <li><a href="{{ route('admin.login') }}">Login</a></li>
+                @else
+                    <li><a href="#">{{ Auth::user()->name }}</a></li>
+                    <li><a href="{{ route('admin.login.sair') }}">Sair</a></li>
+                @endif
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+colocar o codigo $('.dropdown-button').dropdown(); no init.js dentro do bloco do $(document).ready(function ()
+
+
+$(document).ready(function () {
+  $('.sidenav').sidenav();
+  $('.slider').slider({ full_width: true });
+  $('select').formSelect();
+  $('.dropdown-button').dropdown();
+});
+
+
+vamos criar um diretorio para as paginas 
+
+em views admin criar o diretorio "paginas"
+e dentro dele criar a view index.blade
+copiar o conteudo da views>admin>usuarios>index.blade alterando o titulo de lista de usuarios para lista de paginas alem de editar os campos de formularios 
+ficando assim:
+
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <h2 class="center">Lista de Páginas</h2>
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper green">
+                    <div class="col s12">
+                        <a href="{{ route('admin.principal') }}" class="breadcrumb">Inicio</a>
+                        <a class="breadcrumb">Lista de Páginas</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="row">
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Tipo</th>
+                        <th>Ação</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($paginas as $pagina)
+
+
+                        <tr>
+                            <td>{{ $pagina->id }}</td>
+                            <td>{{ $pagina->titulo }}</td>
+                            <td>{{ $pagina->descricao }}</td>
+                            <td>{{ $pagina->tipo }}</td>
+                            <td>
+                                <a class="btn orange"
+                                    href="{{ route('admin.paginas.editar', $pagina->id) }}">Editar</a>
+
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+@endsection
+
+
+
+ir no controlador Admin>PaginaController e 
+
+
+
+
+
+
+
+
 
 
 
